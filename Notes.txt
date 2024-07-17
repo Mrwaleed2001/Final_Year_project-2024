@@ -1,0 +1,94 @@
+# Import the required libraries
+from sklearn.feature_extraction.text import TfidfVectorizer
+
+# Build TF-IDF matrix using stemming
+
+tfidf = TfidfVectorizer(tokenizer=stem) #Using stemming instead of lemmatization
+
+from sklearn.metrics.pairwise import cosine_similarity
+
+question = "What is average incubation period of covid 19?"
+#Creating tfidf matrix for sentences and the question
+sentences_question_tfidf_matrix = tfidf.fit_transform(sentences + [question])
+
+# Extract the TF-IDF vector for the question (last in the matrix)
+question_vector = sentences_question_tfidf_matrix[-1]
+
+# Compute cosine similarities between the question and all answers
+similarities = cosine_similarity(question_vector, sentences_question_tfidf_matrix[:-1])[0]
+print("Similarity score with each sentence: ")
+print(similarities)
+
+import numpy as np
+#Identify the index of the most similar answer
+most_similar_index = np.argmax(similarities)
+most_similar_sentence = sentences[most_similar_index]
+print(most_similar_sentence)
+
+
+Method 2 Word2Vec
+from gensim.models import Word2Vec
+
+# Tokenization of sentences
+sentences = [nltk.word_tokenize(sentence) for sentence in sentences]
+# Train the Word2Vec model (sg=0 specifies that it is not skip-gram)
+word2vec_model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, sg=0)
+
+# Get the vector representation of a word
+
+word_vectors = [word2vec_model.wv[word] for word in sentences]
+
+# Now Calculating sentence vector as per the formula of averaging
+
+# Summing up the word vectors for each sentence at each element of word vectors
+summed_vectors = [np.sum(vectors, axis=0) for vectors in word_vectors]
+i = len(summed_vectors)
+
+#Calculating the sentence vectors through word vectors
+sentence_vectors=[]
+for x in range(i):
+    sentence_vectors.append(summed_vectors[x]/len(word_vectors[x]))
+
+
+summed_question_vector = np.sum(question_word_vectors, axis=0)
+question_vector = summed_question_vector/len(question_word_vectors)
+#Calculating cosine similarity between question and the sentences
+similarities = cosine_similarity(question_vector.reshape(1,-1), sentence_vectors)[0]
+print("Similarity score with each sentence: ")
+print(similarities)
+#Finding most similar sentence to the question
+most_similar_index = np.argmax(similarities)
+most_similar_sentence = sentences[most_similar_index]
+print(most_similar_sentence)
+
+skipgram method predicts context from center word
+# Train the Word2Vec model
+word2vec_model = Word2Vec(sentences, vector_size=100, window=5, min_count=1, sg=1)
+# Get the vector representation each word
+word_vectors = [word2vec_model.wv[word] for word in sentences]
+# Now Calculating sentence vector as per the formula of averaging
+
+# Summing up the word vectors for each sentence at each element of word vectors
+summed_vectors = [np.sum(vectors, axis=0) for vectors in word_vectors]
+i = len(summed_vectors)
+sentence_vectors=[]
+for x in range(i):
+    sentence_vectors.append(summed_vectors[x]/len(word_vectors[x]))
+
+#For question vectorization
+word2vec_model = Word2Vec([question.split()], vector_size=100, window=5, min_count=1, sg=0)
+question_word_vectors = [word2vec_model.wv[word] for word in question.split()]
+
+#Calculating cosine similarity between question and the sentences
+similarities = cosine_similarity(question_vector.reshape(1,-1), sentence_vectors)[0]
+print("Similarity score with each sentence: ")
+print(similarities)
+
+#finidng most similar sentence
+most_similar_index = np.argmax(similarities)
+most_similar_sentence = sentences[most_similar_index]
+print(most_similar_sentence)
+
+Method 3: Openai Embeddings
+
+****
