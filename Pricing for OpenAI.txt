@@ -1,0 +1,24 @@
+Pricing for OpenAI
+
+Multiple models, each with different capabilities and price points. Prices can be viewed in units of either per 1M or 1K tokens. You can think of tokens as pieces of words, where 1,000 tokens is about 750 words. This paragraph is 35 tokens.
+
+Language models are also available in the Batch API that returns completions within 24 hours for a 50% discount.
+
+Model			Input			Output
+gpt-3.5-turbo-0125	$0.50 / 1M tokens	$1.50 / 1M tokens
+gpt-3.5-turbo-instruct	$1.50 / 1M tokens	$2.00 / 1M tokens
+
+Build advanced search, clustering, topic modeling, and classification functionality with our embeddings offering.
+
+Model			Usage
+text-embedding-3-small	$0.02 / 1M tokens
+text-embedding-3-large	$0.13 / 1M tokens
+ada v2			$0.10 / 1M tokens
+
+Requests needed: 1500 for testing 1500 after application deployment (embeddings + generation)
+
+embedding (text-embedding-3-small) cost estimate 1500 (assuming each has million tokens) = 1500 * 0.02 = 30$
+embedding (text-embedding-3-large) cost estimate 1500 (assuming each has million tokens) = 1500 * 0.13 = 195$
+embedding (ada v2) cost estimate 1500 (assuming each has million tokens) = 1500 * 0.1 = 150$
+
+Generation around 700$
